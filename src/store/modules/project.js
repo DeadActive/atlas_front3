@@ -3,6 +3,8 @@ import GroupAPI from '../../api/group'
 
 import Vue from 'vue'
 
+import { GeoJsonLayer } from '@deck.gl/layers'
+
 export default {
     namespaced: true,
     name: 'project',
@@ -39,6 +41,13 @@ export default {
         async loadGroups({ commit }, { id }) {
             const { data } = await GroupAPI.getGroups(id)
             commit('SET_GROUPS', data.list)
+        },
+        async loadLayer({ commit }, layer) {
+            if (layer.layerType === 'VECTOR') {
+                const deckLayer = new GeoJsonLayer({
+                    id: layer.id,
+                })
+            }
         },
         setGroups({ commit }, payload) {
             commit('SET_GROUPS', payload)

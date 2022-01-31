@@ -24,7 +24,11 @@ import TreeGroup from './TreeGroup'
 
 export default {
     methods: {
-        ...mapActions('Project', ['setGroups']),
+        ...mapActions('project', ['loadGroups', 'setGroups']),
+    },
+    mounted() {
+        const id = this.$router.currentRoute.params.id
+        this.loadGroups({ id })
     },
     computed: {
         ...mapGetters('project', ['groups']),

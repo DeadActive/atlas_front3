@@ -32,13 +32,12 @@ export default {
         const id = this.$router.currentRoute.params.id
 
         this.loadProject({ id })
-        this.loadGroups({ id })
     },
     computed: {
         ...mapGetters('project', ['currentProject']),
     },
     methods: {
-        ...mapActions('project', ['loadProject', 'loadGroups']),
+        ...mapActions('project', ['loadProject']),
     },
 }
 </script>
