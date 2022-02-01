@@ -42,7 +42,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions('project', ['loadLayer']),
+        ...mapActions('deck', ['loadLayer']),
         toggleShow() {
             if (this.layer.imageryLayer) {
                 this.layer.imageryLayer.show = !this.layer.imageryLayer.show

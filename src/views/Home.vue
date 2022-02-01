@@ -15,5 +15,10 @@ export default {
         ProjectNav,
         Deck,
     },
+    mounted() {
+        if (this.$router.currentRoute.fullPath === '/') {
+            this.$router.push('/projects')
+        }
+    },
 }
 </script>

@@ -6,8 +6,10 @@
 
 <script>
 import { Deck } from '@deck.gl/core'
-import { BitmapLayer } from '@deck.gl/layers'
+import { BitmapLayer, GeoJsonLayer } from '@deck.gl/layers'
 import { TileLayer } from '@deck.gl/geo-layers'
+import { mapActions, mapGetters } from 'vuex'
+import { baseLayers } from '../deck/baselayers'
 
 const initialViewState = {
     longitude: -122.45,
@@ -15,39 +17,40 @@ const initialViewState = {
     zoom: 15,
 }
 
+var deck = {}
+
 export default {
     data() {
         return {
             deck: {},
         }
     },
+    created() {
+        this.updateBaselayers(baseLayers)
+        this.updateBaselayer(baseLayers[0])
+    },
     mounted() {
-        this.deck = new Deck({
+        deck = new Deck({
             canvas: this.$refs.deck,
             initialViewState,
             controller: true,
-            layers: [
-                new TileLayer({
-                    data: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-
-                    minZoom: 0,
-                    maxZoom: 19,
-                    tileSize: 256,
-
-                    renderSubLayers: (props) => {
-                        const {
-                            bbox: { west, south, east, north },
-                        } = props.tile
-
-                        return new BitmapLayer(props, {
-                            data: null,
-                            image: props.data,
-                            bounds: [west, south, east, north],
-                        })
-                    },
-                }),
-            ],
+            layers: [],
         })
+    },
+    computed: {
+        ...mapGetters('deck', ['layers']),
+    },
+    watch: {
+        layers(newVal) {
+            deck.setProps({ layers: [...newVal] })
+        },
+    },
+    methods: {
+        ...mapActions('deck', [
+            'updateBaselayers',
+            'updateBaselayer',
+            'updateLayers',
+        ]),
     },
 }
 </script>

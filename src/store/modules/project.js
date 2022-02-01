@@ -42,13 +42,6 @@ export default {
             const { data } = await GroupAPI.getGroups(id)
             commit('SET_GROUPS', data.list)
         },
-        async loadLayer({ commit }, layer) {
-            if (layer.layerType === 'VECTOR') {
-                const deckLayer = new GeoJsonLayer({
-                    id: layer.id,
-                })
-            }
-        },
         setGroups({ commit }, payload) {
             commit('SET_GROUPS', payload)
         },
