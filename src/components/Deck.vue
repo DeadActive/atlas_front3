@@ -12,9 +12,9 @@ import { mapActions, mapGetters } from 'vuex'
 import { baseLayers } from '../deck/baselayers'
 
 const initialViewState = {
-    longitude: -122.45,
-    latitude: 37.8,
-    zoom: 15,
+    latitude: 55.764094,
+    longitude: 37.617617,
+    zoom: 10,
 }
 
 var deck = {}
@@ -34,7 +34,22 @@ export default {
             canvas: this.$refs.deck,
             initialViewState,
             controller: true,
+            useDevicePixels: false,
             layers: [],
+            getTooltip: ({ object }) =>
+                object && {
+                    html: `<div><h3>${
+                        object.properties.name
+                    }</h3><p>${JSON.stringify(
+                        object.properties,
+                        null,
+                        2
+                    )}</p></div>`,
+                    style: {
+                        backgroundColor: '#fff',
+                        maxWidth: '300px',
+                    },
+                },
         })
     },
     computed: {

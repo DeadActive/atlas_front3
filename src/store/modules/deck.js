@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { GeoJsonLayer } from '@deck.gl/layers'
+import { MVTLayer } from '@deck.gl/geo-layers'
+import { TMSLayer } from '../../deck/baselayers'
 import LayerAPI from '../../api/layer'
 
 export default {
@@ -35,15 +36,33 @@ export default {
         },
         async loadLayer({ commit }, layer) {
             if (layer.layerType === 'VECTOR') {
-                const { data } = await LayerAPI.getVectorLayer(layer.id)
+                const data = `/api/public/MVT/${layer.id}/{z}/{y}/{x}.pbf`
                 commit(
                     'ADD_LAYER',
-                    new GeoJsonLayer({
+                    new MVTLayer({
                         id: layer.id,
                         data,
+                        pickable: true,
                         getFillColor: [22, 180, 247, 180],
                         pointType: 'circle',
                         getPointRadius: 100,
+                    })
+                )
+            }
+            if (layer.layerType === 'RASTER') {
+                const { data: metadata } = await LayerAPI.getRasterMetadata(
+                    layer.id
+                )
+                const data = `/api/public/TMS/${layer.id}/{z}/{-y}/{x}.png`
+
+                commit(
+                    'ADD_LAYER',
+                    new TMSLayer({
+                        id: layer.id,
+                        data,
+                        maxZoom: metadata.maxzoom,
+                        minZoom: metadata.minzoom,
+                        extent: metadata.bounds,
                     })
                 )
             }
