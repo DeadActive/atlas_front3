@@ -53,7 +53,7 @@ export default {
                 const { data: metadata } = await LayerAPI.getRasterMetadata(
                     layer.id
                 )
-                const data = `/api/public/TMS/${layer.id}/{z}/{-y}/{x}.png`
+                const data = `/api/public/TMS/${layer.id}/{z}/{x}/{-y}.png`
 
                 commit(
                     'ADD_LAYER',
@@ -62,7 +62,7 @@ export default {
                         data,
                         maxZoom: metadata.maxzoom,
                         minZoom: metadata.minzoom,
-                        extent: metadata.bounds,
+                        extent: data.bounds,
                     })
                 )
             }
